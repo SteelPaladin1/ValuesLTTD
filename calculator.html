@@ -1,116 +1,74 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LTTD ┆ Trade Checker</title>
+    <meta charset="UTF-8"><title>LTTD ┆ Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #020617; color: white; font-family: 'Poppins', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        
-        /* ПРЯМОУГОЛЬНЫЙ НЕОН В НАВИГАЦИИ */
-        .nav-btn { @apply px-4 py-4 border-2 font-black text-[10px] uppercase tracking-tighter transition-all duration-300 flex-1 text-center; }
-        .tab-active { border-color: #a855f7; color: #a855f7; text-shadow: 0 0 10px #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.2); background: rgba(168, 85, 247, 0.05); }
-        .tab-inactive { @apply border-slate-800 text-slate-600 hover:border-slate-500 hover:text-slate-300; }
-
-        /* СТОРОНЫ КАЛЬКУЛЯТОРА */
+        body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
+        .nav-container { @apply flex w-full border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50; }
+        .nav-item { @apply flex-1 py-5 text-center font-black text-[11px] uppercase tracking-tighter transition-all duration-300 border-r border-white/5; border-bottom: 4px solid transparent; }
+        .n-purple { color: #a855f7; } .n-purple.active, .n-purple:hover { border-bottom-color: #a855f7; background: rgba(168, 85, 247, 0.15); box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.2); text-shadow: 0 0 10px #a855f7; color: white; }
         .side-your { border: 2px solid #00a2ff; box-shadow: 0 0 20px rgba(0, 162, 255, 0.2); }
         .side-their { border: 2px solid #ff0044; box-shadow: 0 0 20px rgba(255, 0, 68, 0.2); }
-        .gem-input { @apply bg-black/50 border border-slate-800 rounded-xl p-3 text-center w-full outline-none focus:border-white transition-all font-bold text-lg; }
     </style>
 </head>
 <body x-data="calcApp()">
-
-    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto flex">
-            <a href="index.html" class="nav-btn tab-inactive">Main</a>
-            <a href="rarity.html" class="nav-link nav-btn tab-inactive">Units</a>
-            <a href="calculator.html" class="nav-link nav-btn tab-active">Calc</a>
-            <a href="signs.html" class="nav-link nav-btn tab-inactive">Signs</a>
-            <a href="codes.html" class="nav-link nav-btn tab-inactive">Codes</a>
-            <a href="updates.html" class="nav-link nav-btn tab-inactive">Updates</a>
-        </div>
+    <nav class="nav-container">
+        <a href="index.html" class="nav-item text-[#38bdf8]">Main</a>
+        <a href="rarity.html" class="nav-item text-[#22d3ee]">Units</a>
+        <a href="calculator.html" class="nav-item n-purple active">Calc</a>
+        <a href="signs.html" class="nav-item text-[#ef4444]">Signs</a>
+        <a href="codes.html" class="nav-item text-[#4ade80]">Codes</a>
+        <a href="updates.html" class="nav-item text-[#f59e0b]">Updates</a>
     </nav>
-
-    <div class="max-w-6xl mx-auto px-4 py-10">
-        <h1 class="text-center text-4xl font-black mb-12 italic tracking-tighter uppercase" style="color: #a855f7; text-shadow: 0 0 15px #a855f7;">
-            LTTD Trade Calculator
-        </h1>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div class="glass p-8 rounded-[40px] side-your">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-blue-400 font-black text-2xl uppercase italic">Your Offer</h2>
-                    <button @click="myItems = []; myGems = 0" class="bg-red-500/20 text-red-500 px-4 py-1 rounded-full text-xs font-bold hover:bg-red-600 transition-all">CLEAR</button>
-                </div>
-                <div class="h-64 bg-black/40 rounded-3xl mb-6 p-4 flex flex-wrap gap-2 content-start overflow-y-auto">
+    <div class="max-w-6xl mx-auto py-10 px-4">
+        <h1 class="text-center text-4xl font-black mb-12 italic uppercase text-purple-500">Trade Calculator</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div class="bg-slate-900/50 p-8 rounded-[40px] side-your">
+                <h2 class="text-blue-400 font-black text-2xl uppercase mb-4">Your Side</h2>
+                <div class="h-40 bg-black rounded-2xl mb-6 p-4 flex flex-wrap gap-2 overflow-y-auto">
                     <template x-for="(id, idx) in myItems">
-                        <div @click="myItems.splice(idx, 1)" class="px-3 py-1 bg-blue-500/20 border border-blue-500/40 rounded-lg text-[10px] font-black cursor-pointer hover:bg-red-600 transition-all uppercase" x-text="getItem(id).name"></div>
+                        <div @click="myItems.splice(idx, 1)" class="px-3 py-1 bg-blue-600 rounded-lg text-[10px] font-black cursor-pointer hover:bg-red-600" x-text="getItem(id).name"></div>
                     </template>
                 </div>
-                <div class="grid grid-cols-2 gap-6 items-end">
-                    <div>
-                        <label class="text-[10px] font-black text-slate-500 uppercase mb-2 block">Gems 💎</label>
-                        <input type="number" x-model.number="myGems" class="gem-input text-blue-400">
-                    </div>
-                    <div class="text-right">
-                        <div class="text-[10px] font-black text-slate-500 uppercase">Total</div>
-                        <div class="text-4xl font-black text-blue-400 italic" x-text="calcTotal('my').toLocaleString()"></div>
-                    </div>
-                </div>
+                <input type="number" x-model="myGems" class="w-full bg-black border border-slate-700 p-3 rounded-xl mb-4 text-center text-2xl font-black text-blue-400" placeholder="💎 ADD GEMS">
+                <div class="text-right text-4xl font-black italic text-blue-400" x-text="calcTotal('my').toLocaleString()"></div>
             </div>
-
-            <div class="glass p-8 rounded-[40px] side-their">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-red-500 font-black text-2xl uppercase italic">Their Offer</h2>
-                    <button @click="theirItems = []; theirGems = 0" class="bg-red-500/20 text-red-500 px-4 py-1 rounded-full text-xs font-bold hover:bg-red-600 transition-all">CLEAR</button>
-                </div>
-                <div class="h-64 bg-black/40 rounded-3xl mb-6 p-4 flex flex-wrap gap-2 content-start overflow-y-auto">
+            <div class="bg-slate-900/50 p-8 rounded-[40px] side-their">
+                <h2 class="text-red-500 font-black text-2xl uppercase mb-4">Their Side</h2>
+                <div class="h-40 bg-black rounded-2xl mb-6 p-4 flex flex-wrap gap-2 overflow-y-auto">
                     <template x-for="(id, idx) in theirItems">
-                        <div @click="theirItems.splice(idx, 1)" class="px-3 py-1 bg-red-500/20 border border-red-500/40 rounded-lg text-[10px] font-black cursor-pointer hover:bg-blue-500 transition-all uppercase" x-text="getItem(id).name"></div>
+                        <div @click="theirItems.splice(idx, 1)" class="px-3 py-1 bg-red-600 rounded-lg text-[10px] font-black cursor-pointer hover:bg-blue-600" x-text="getItem(id).name"></div>
                     </template>
                 </div>
-                <div class="grid grid-cols-2 gap-6 items-end">
-                    <div>
-                        <label class="text-[10px] font-black text-slate-500 uppercase mb-2 block">Gems 💎</label>
-                        <input type="number" x-model.number="theirGems" class="gem-input text-red-500">
-                    </div>
-                    <div class="text-right">
-                        <div class="text-[10px] font-black text-slate-500 uppercase">Total</div>
-                        <div class="text-4xl font-black text-red-500 italic" x-text="calcTotal('their').toLocaleString()"></div>
-                    </div>
-                </div>
+                <input type="number" x-model="theirGems" class="w-full bg-black border border-slate-700 p-3 rounded-xl mb-4 text-center text-2xl font-black text-red-500" placeholder="💎 ADD GEMS">
+                <div class="text-right text-4xl font-black italic text-red-500" x-text="calcTotal('their').toLocaleString()"></div>
             </div>
         </div>
-
-        <div class="glass p-8 rounded-3xl text-center mb-12 border-2 transition-all duration-500" :class="resColor()">
-            <div class="text-4xl font-black uppercase italic tracking-widest" x-text="calcTotal('my') + calcTotal('their') == 0 ? '⚖️ Waiting...' : calcDiff()"></div>
+        <div class="bg-slate-900 p-10 rounded-3xl text-center text-4xl font-black border-2" :class="resColor()">
+            <span x-text="calcDiff()"></span>
         </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mt-10">
             <template x-for="item in items">
-                <div class="glass p-4 rounded-2xl border-b-4 hover:scale-105 transition-all border-slate-700">
-                    <div class="font-black text-[10px] mb-3 truncate opacity-50 uppercase" x-text="item.name"></div>
+                <div class="bg-slate-900 p-4 rounded-2xl text-center border border-white/5">
+                    <div class="text-[10px] font-bold mb-3" x-text="item.name"></div>
                     <div class="flex gap-2">
-                        <button @click="myItems.push(item.id)" class="flex-1 bg-blue-600 py-2 rounded-lg font-black text-[10px] uppercase">Me</button>
-                        <button @click="theirItems.push(item.id)" class="flex-1 bg-red-600 py-2 rounded-lg font-black text-[10px] uppercase">Them</button>
+                        <button @click="myItems.push(item.id)" class="flex-1 bg-blue-600 py-1 rounded font-black text-[10px]">ME</button>
+                        <button @click="theirItems.push(item.id)" class="flex-1 bg-red-600 py-1 rounded font-black text-[10px]">THEM</button>
                     </div>
                 </div>
             </template>
         </div>
     </div>
-
     <script>
         function calcApp() {
             return {
-                myGems: 0, theirGems: 0,
-                myItems: [], theirItems: [],
+                myItems: [], theirItems: [], myGems: 0, theirGems: 0,
                 items: [
                     { id: 1, name: "Cameraman", price: 100 },
-                    { id: 2, name: "Titan", price: 15000 },
+                    { id: 2, name: "Mythic Clock", price: 50000 }
                 ],
                 getItem(id) { return this.items.find(i => i.id == id); },
                 calcTotal(side) {
@@ -120,14 +78,14 @@
                 },
                 calcDiff() {
                     let m = this.calcTotal('my'), t = this.calcTotal('their');
-                    if(m == 0) return "Add your offer";
+                    if(m == 0) return "ADD YOUR SIDE";
                     let p = Math.round(((t/m)-1)*100);
-                    return p > 0 ? "🏆 WIN (+" + p + "%)" : (p==0 ? "⚖️ FAIR" : "❌ LOSS (" + p + "%)");
+                    return p > 0 ? "🏆 WIN (+" + p + "%)" : (p == 0 ? "⚖️ FAIR" : "❌ LOSS (" + p + "%)");
                 },
                 resColor() {
                     let m = this.calcTotal('my'), t = this.calcTotal('their');
-                    if(m+t == 0) return "border-white/5 text-slate-700";
-                    return t > m ? "border-green-500 bg-green-500/10 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)]" : (t==m ? "border-yellow-500 text-yellow-400" : "border-red-500 text-red-400 bg-red-500/10");
+                    if(m+t == 0) return "text-slate-700";
+                    return t > m ? "text-green-400 border-green-500" : (t == m ? "text-yellow-400 border-yellow-500" : "text-red-400 border-red-500");
                 }
             }
         }
