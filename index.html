@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValuesLTTD ┆ Trade Hub</title>
+    <title>ValuesLTTD ┆ Ultimate Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
@@ -11,222 +11,250 @@
         body { background-color: #020617; color: white; font-family: 'Poppins', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
         
-        /* Цвета сторон как на скриншоте */
-        .side-your { border: 2px solid #00a2ff; box-shadow: 0 0 15px rgba(0, 162, 255, 0.2); }
-        .side-their { border: 2px solid #ff0044; box-shadow: 0 0 15px rgba(255, 0, 68, 0.2); }
+        /* Кнопки редкостей */
+        .rarity-btn { @apply px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all border-2 bg-slate-950; }
+        .btn-uncommon { @apply border-green-500 text-green-500 hover:bg-green-500 hover:text-white; }
+        .btn-rare { @apply border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white; }
+        .btn-epic { @apply border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white; }
+        .btn-legendary { @apply border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white; }
+        .btn-mythic { @apply border-red-500 text-red-500 hover:bg-red-500 hover:text-white; }
+        .btn-exclusive { @apply border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white; }
         
-        /* Кнопки Навигации */
-        .nav-link { @apply px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2 border-transparent; }
-        .nav-link.active { @apply border-blue-500 text-blue-400; }
-        .nav-link:not(.active) { @apply text-slate-500 hover:text-slate-300; }
+        /* Навигация (Неон) */
+        .nav-btn { @apply px-6 py-3 font-black text-xs uppercase tracking-widest transition-all border-b-4; }
+        .nav-active-blue { @apply border-blue-500 text-blue-400 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.3)]; }
+        .nav-active-purple { @apply border-purple-500 text-purple-400 bg-purple-500/10 shadow-[0_0_15px_rgba(168,85,247,0.3)]; }
+        .nav-active-green { @apply border-green-500 text-green-400 bg-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.3)]; }
 
-        /* Поля ввода для гемов */
-        .gem-input { @apply bg-slate-900/50 border border-slate-700 rounded-lg p-2 text-center w-full focus:outline-none focus:border-blue-500 font-mono text-lg; }
+        /* Стороны калькулятора */
+        .side-your { border: 2px solid #00a2ff; box-shadow: 0 0 20px rgba(0, 162, 255, 0.1); }
+        .side-their { border: 2px solid #ff0044; box-shadow: 0 0 20px rgba(255, 0, 68, 0.1); }
+        .gem-input { @apply bg-black/40 border border-slate-800 rounded-xl p-3 text-center w-full focus:outline-none focus:border-white transition-all font-bold text-lg; }
     </style>
 </head>
 <body x-data="portalApp()">
 
-    <nav class="bg-black/50 border-b border-white/5 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
-            <div class="font-black text-xl tracking-tighter">VALUES<span class="text-blue-500">LTTD</span></div>
-            <div class="hidden md:flex gap-6">
-                <a href="#" @click.prevent="tab = 'values'" class="nav-link" :class="tab == 'values' && 'active'">Main Page</a>
-                <a href="#" @click.prevent="tab = 'calc'" class="nav-link" :class="tab == 'calc' && 'active'">W/F/L Calculator</a>
-                <a href="#" @click.prevent="tab = 'staff'" class="nav-link" :class="tab == 'staff' && 'active'">Staff & Partners</a>
+    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto flex justify-between items-stretch h-16">
+            <div class="flex items-center px-6 font-black text-xl tracking-tighter uppercase border-r border-white/5">
+                VALUES<span class="text-blue-500">LTTD</span>
+            </div>
+            <div class="flex flex-grow">
+                <button @click="tab = 'values'" class="nav-btn flex-grow" :class="tab == 'values' ? 'nav-active-blue' : 'text-slate-500'">Units Wiki</button>
+                <button @click="tab = 'calc'" class="nav-btn flex-grow" :class="tab == 'calc' ? 'nav-active-purple' : 'text-slate-500'">Calculator</button>
+                <button @click="tab = 'links'" class="nav-btn flex-grow" :class="tab == 'links' ? 'nav-active-green' : 'text-slate-500'">Links</button>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-4 pt-10">
-
-        <div x-show="tab == 'calc'" x-transition>
-            <h1 class="text-center text-3xl font-black mb-10 tracking-widest text-blue-400 uppercase">LTTD Trade Calculator</h1>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <div class="glass p-6 rounded-3xl side-your relative">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-blue-400 font-black uppercase tracking-tighter">Your Offer</h2>
-                        <button @click="resetSide('my')" class="text-[10px] bg-red-900/30 text-red-400 px-2 py-1 rounded hover:bg-red-600 hover:text-white transition-all uppercase font-bold">Clear</button>
-                    </div>
-                    
-                    <div class="h-48 bg-black/40 rounded-2xl mb-6 border border-white/5 p-4 overflow-y-auto flex flex-wrap gap-2 content-start">
-                        <template x-for="id in mySelectedItems">
-                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg border border-blue-500/30 flex items-center justify-center text-[10px] font-bold" x-text="getItem(id).name.substring(0,2)"></div>
-                        </template>
-                        <div x-show="mySelectedItems.length == 0" class="m-auto text-slate-700 text-sm italic">Add units from the list below...</div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center">
-                            <label class="text-[10px] uppercase text-slate-500 font-bold">Gems 💎</label>
-                            <input type="number" x-model.number="myGems" class="gem-input">
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] uppercase text-slate-500 font-bold">Total Value</div>
-                            <div class="text-2xl font-black text-blue-400" x-text="Math.round(calculateTotal('my')).toLocaleString()"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-3xl side-their relative">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-red-500 font-black uppercase tracking-tighter">Their Offer</h2>
-                        <button @click="resetSide('their')" class="text-[10px] bg-red-900/30 text-red-400 px-2 py-1 rounded hover:bg-red-600 hover:text-white transition-all uppercase font-bold">Clear</button>
-                    </div>
-                    
-                    <div class="h-48 bg-black/40 rounded-2xl mb-6 border border-white/5 p-4 overflow-y-auto flex flex-wrap gap-2 content-start">
-                        <template x-for="id in theirSelectedItems">
-                            <div class="w-12 h-12 bg-red-500/20 rounded-lg border border-red-500/30 flex items-center justify-center text-[10px] font-bold" x-text="getItem(id).name.substring(0,2)"></div>
-                        </template>
-                        <div x-show="theirSelectedItems.length == 0" class="m-auto text-slate-700 text-sm italic">Add units from the list below...</div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center">
-                            <label class="text-[10px] uppercase text-slate-500 font-bold">Gems 💎</label>
-                            <input type="number" x-model.number="theirGems" class="gem-input focus:border-red-500">
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] uppercase text-slate-500 font-bold">Total Value</div>
-                            <div class="text-2xl font-black text-red-500" x-text="Math.round(calculateTotal('their')).toLocaleString()"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass p-5 rounded-2xl text-center mb-10 transition-all duration-500" :class="resultColor()">
-                <div class="flex items-center justify-center gap-4 text-2xl font-black italic uppercase">
-                    <span x-text="calculateTotal('my') + calculateTotal('their') == 0 ? '⚖️ Waiting...' : calculateDiff()"></span>
-                </div>
-            </div>
-
-            <div class="mb-10">
-                <input type="text" x-model="search" placeholder="Search units to add..." class="w-full p-4 glass rounded-xl outline-none focus:ring-2 focus:ring-blue-500 mb-6">
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                    <template x-for="item in filteredItems()" :key="item.id">
-                        <div class="glass p-3 rounded-xl border border-white/5 hover:border-white/20 transition-all">
-                            <div class="text-[10px] font-bold text-slate-500 mb-1 truncate" x-text="item.name"></div>
-                            <div class="flex gap-1">
-                                <button @click="add('my', item.id)" class="flex-1 bg-blue-600 hover:bg-blue-400 py-1 rounded font-bold text-[10px] transition-colors uppercase">+ Me</button>
-                                <button @click="add('their', item.id)" class="flex-1 bg-red-600 hover:bg-red-400 py-1 rounded font-bold text-[10px] transition-colors uppercase">+ Them</button>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </div>
+    <div class="max-w-7xl mx-auto px-4 py-10">
 
         <div x-show="tab == 'values'" x-transition>
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-4xl font-black italic tracking-tighter">VALUE LIST</h1>
-                <select x-model="multiplier" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm font-bold">
-                    <option value="1">STANDARD (1.0x)</option>
-                    <option value="1.1">PARTNER (+10%)</option>
-                    <option value="1.15">OFFICIAL PARTNER (+15%)</option>
-                </select>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4">
-                <template x-for="item in items" :key="item.id">
-                    <div class="glass p-4 rounded-2xl border-t-4" :class="'rarity-' + item.rarity">
-                        <div class="w-full h-32 bg-black rounded-xl mb-3 flex items-center justify-center">
-                            <img :src="item.img" x-show="item.img" class="w-full h-full object-contain p-2">
-                            <span x-show="!item.img" class="text-slate-700 text-[10px] font-black uppercase">No Image</span>
+            <header class="text-center mb-16">
+                <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-8">
+                    Units <span class="text-slate-600">R</span><span class="text-green-500">a</span><span class="text-blue-500">r</span><span class="text-yellow-500">i</span><span class="text-red-500">t</span><span class="text-white">y</span> Page
+                </h1>
+                
+                <div class="flex flex-wrap justify-center gap-2 mb-10">
+                    <button @click="filterRarity = 'all'" class="rarity-btn border-white/10 text-white" :class="filterRarity == 'all' && 'bg-white text-black'">All</button>
+                    <button @click="filterRarity = 'uncommon'" class="rarity-btn btn-uncommon" :class="filterRarity == 'uncommon' && 'bg-green-500 text-white'">Uncommon</button>
+                    <button @click="filterRarity = 'rare'" class="rarity-btn btn-rare" :class="filterRarity == 'rare' && 'bg-blue-500 text-white'">Rare</button>
+                    <button @click="filterRarity = 'epic'" class="rarity-btn btn-epic" :class="filterRarity == 'epic' && 'bg-purple-500 text-white'">Epic</button>
+                    <button @click="filterRarity = 'legendary'" class="rarity-btn btn-legendary" :class="filterRarity == 'legendary' && 'bg-orange-500 text-white'">Legendary</button>
+                    <button @click="filterRarity = 'mythic'" class="rarity-btn btn-mythic" :class="filterRarity == 'mythic' && 'bg-red-500 text-white'">Mythic</button>
+                    <button @click="filterRarity = 'exclusive'" class="rarity-btn btn-exclusive" :class="filterRarity == 'exclusive' && 'bg-cyan-400 text-white'">Exclusive</button>
+                </div>
+
+                <div class="flex items-center justify-center gap-4 mb-12">
+                    <span class="text-3xl">💎</span>
+                    <h2 class="text-3xl font-black uppercase italic tracking-widest text-blue-400" x-text="filterRarity + ' Value'"></h2>
+                    <span class="text-3xl">💎</span>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                <template x-for="item in filteredItems()" :key="item.id">
+                    <div class="group cursor-default">
+                        <div class="relative aspect-square rounded-2xl overflow-hidden border-b-8 mb-4 transition-transform group-hover:scale-105" :class="'border-' + getRarityColor(item.rarity)">
+                            <img :src="item.img" x-show="item.img" class="w-full h-full object-cover">
+                            <div x-show="!item.img" class="w-full h-full bg-slate-900 flex items-center justify-center text-[10px] text-slate-700 font-bold">NO IMAGE</div>
+                            <div class="absolute bottom-3 left-3 bg-black/90 px-4 py-1 rounded-xl font-black text-2xl border border-white/10 italic">
+                                $<span x-text="item.price.toLocaleString()"></span>
+                            </div>
                         </div>
-                        <div class="font-bold text-sm truncate" x-text="item.name"></div>
-                        <div class="text-green-400 font-black" x-text="Math.round(item.price * multiplier).toLocaleString() + ' 💎'"></div>
+                        <h3 class="font-black text-xl mb-3 uppercase italic tracking-tighter" :class="'text-' + getRarityColor(item.rarity)" x-text="item.name"></h3>
+                        <div class="glass p-4 rounded-xl space-y-2 text-[10px] font-black uppercase tracking-widest shadow-inner">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="opacity-40">Value:</span><span x-text="item.value_points"></span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="opacity-40">Demand:</span><span x-text="item.demand + '/10'"></span></div>
+                            <div class="flex justify-between"><span class="opacity-40">Status:</span><span x-text="item.status"></span></div>
+                        </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <div x-show="tab == 'staff'" x-transition>
-            <h1 class="text-3xl font-black mb-10">STAFF & PARTNERS</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <template x-for="person in staff">
-                    <div class="glass p-6 rounded-3xl flex items-center gap-4 border-l-4 border-blue-500">
-                        <div class="w-12 h-12 bg-slate-800 rounded-full"></div>
+        <div x-show="tab == 'calc'" x-transition>
+            <h1 class="text-center text-4xl font-black mb-12 italic tracking-tighter text-purple-400">LTTD TRADE CALCULATOR</h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                <div class="glass p-8 rounded-[40px] side-your">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-blue-400 font-black text-2xl uppercase italic">Your Offer</h2>
+                        <button @click="resetSide('my')" class="bg-red-500/20 text-red-500 px-4 py-1 rounded-full text-xs font-bold hover:bg-red-500 hover:text-white transition-all">CLEAR</button>
+                    </div>
+                    <div class="h-64 bg-black/40 rounded-3xl mb-6 p-4 flex flex-wrap gap-2 content-start overflow-y-auto border border-white/5">
+                        <template x-for="(id, index) in mySelectedItems">
+                            <div @click="remove('my', index)" class="w-16 h-16 bg-blue-500/20 border border-blue-500/40 rounded-xl flex items-center justify-center text-[10px] font-black cursor-pointer hover:bg-red-500/40 transition-all uppercase" x-text="getItem(id).name.substring(0,3)"></div>
+                        </template>
+                        <div x-show="mySelectedItems.length == 0" class="m-auto text-slate-700 font-bold italic text-sm">Select units from below...</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6 items-end">
                         <div>
-                            <div class="font-bold" x-text="person.name"></div>
-                            <div class="text-xs text-blue-400 uppercase font-black" x-text="person.role"></div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase mb-2 block">Add Gems 💎</label>
+                            <input type="number" x-model.number="myGems" class="gem-input text-blue-400 border-blue-500/30">
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[10px] font-black text-slate-500 uppercase mb-1">Total Value</div>
+                            <div class="text-4xl font-black text-blue-400 italic" x-text="calculateTotal('my').toLocaleString()"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-8 rounded-[40px] side-their">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-red-500 font-black text-2xl uppercase italic">Their Offer</h2>
+                        <button @click="resetSide('their')" class="bg-red-500/20 text-red-500 px-4 py-1 rounded-full text-xs font-bold hover:bg-red-500 hover:text-white transition-all">CLEAR</button>
+                    </div>
+                    <div class="h-64 bg-black/40 rounded-3xl mb-6 p-4 flex flex-wrap gap-2 content-start overflow-y-auto border border-white/5">
+                        <template x-for="(id, index) in theirSelectedItems">
+                            <div @click="remove('their', index)" class="w-16 h-16 bg-red-500/20 border border-red-500/40 rounded-xl flex items-center justify-center text-[10px] font-black cursor-pointer hover:bg-red-500/40 transition-all uppercase" x-text="getItem(id).name.substring(0,3)"></div>
+                        </template>
+                        <div x-show="theirSelectedItems.length == 0" class="m-auto text-slate-700 font-bold italic text-sm">Select units from below...</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6 items-end">
+                        <div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase mb-2 block">Add Gems 💎</label>
+                            <input type="number" x-model.number="theirGems" class="gem-input text-red-500 border-red-500/30">
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[10px] font-black text-slate-500 uppercase mb-1">Total Value</div>
+                            <div class="text-4xl font-black text-red-500 italic" x-text="calculateTotal('their').toLocaleString()"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-8 rounded-3xl text-center mb-12 border-2 transition-all duration-500" :class="resultColor()">
+                <div class="text-4xl font-black uppercase italic tracking-widest" x-text="calculateTotal('my') + calculateTotal('their') == 0 ? '⚖️ Waiting...' : calculateDiff()"></div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+                <template x-for="item in items" :key="item.id">
+                    <div class="glass p-4 rounded-2xl border-b-4 hover:scale-105 transition-all" :class="'border-' + getRarityColor(item.rarity)">
+                        <div class="font-black text-[10px] mb-3 truncate opacity-50 uppercase" x-text="item.name"></div>
+                        <div class="flex gap-2">
+                            <button @click="add('my', item.id)" class="flex-1 bg-blue-600 hover:bg-blue-400 py-2 rounded-lg font-black text-[10px] uppercase transition-colors">Me</button>
+                            <button @click="add('their', item.id)" class="flex-1 bg-red-600 hover:bg-red-400 py-2 rounded-lg font-black text-[10px] uppercase transition-colors">Them</button>
                         </div>
                     </div>
                 </template>
             </div>
         </div>
+
+        <div x-show="tab == 'links'" x-transition class="max-w-4xl mx-auto text-center">
+            <h1 class="text-6xl font-black uppercase italic mb-12 flex items-center justify-center gap-6">
+                <span class="text-slate-700">🔗 Community</span> links <span class="text-slate-700">💬</span>
+            </h1>
+            <div class="glass p-12 rounded-[50px] space-y-12 text-left border-t-8 border-green-500">
+                <div class="flex items-center gap-6 group">
+                    <div class="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-red-600/20">🎮</div>
+                    <div>
+                        <div class="text-red-500 font-black uppercase tracking-widest text-xs mb-1">Official Game</div>
+                        <a href="https://www.roblox.com/games/94229247275433/Legacy-Toilet-Tower-Defense" target="_blank" class="text-2xl font-bold hover:text-blue-400 transition-colors break-all">Legacy-Toilet-Tower-Defense</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 group">
+                    <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-600/20">📢</div>
+                    <div>
+                        <div class="text-blue-500 font-black uppercase tracking-widest text-xs mb-1">Discord Server</div>
+                        <a href="https://discord.gg/6wCjwJnc" target="_blank" class="text-2xl font-bold hover:text-blue-400 transition-colors break-all">Join our Community</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
         function portalApp() {
             return {
-                tab: 'calc',
-                multiplier: 1,
+                tab: 'values',
+                filterRarity: 'all',
                 search: '',
                 myGems: 0,
                 theirGems: 0,
-                mySelectedItems: [], // Массив ID выбранных предметов
+                mySelectedItems: [],
                 theirSelectedItems: [],
 
+                // ДАННЫЕ ВСЕХ ПРЕДМЕТОВ
                 items: [
-                    { id: 1, name: "Dark Essence", price: 15000, rarity: "legendary", img: "" },
-                    { id: 2, name: "Cursed Eye", price: 4200, rarity: "epic", img: "" },
-                    { id: 3, name: "Rusty Gear", price: 150, rarity: "common", img: "" },
-                    { id: 4, name: "Blue Battery", price: 1200, rarity: "rare", img: "" },
+                    { id: 1, name: "Cameraman", price: 100, value_points: 1, demand: 0, status: "1/10", rarity: "uncommon", img: "" },
+                    { id: 2, name: "Clover Speakerman", price: 177, value_points: 10, demand: 2, status: "1/10", rarity: "uncommon", img: "" },
+                    { id: 3, name: "Dark Titan", price: 15000, value_points: 500, demand: 8, status: "10/10", rarity: "legendary", img: "" },
+                    { id: 4, name: "Mythic Clock", price: 50000, value_points: 2000, demand: 10, status: "10/10", rarity: "mythic", img: "" },
+                    { id: 5, name: "Exclusive Ninja", price: 120000, value_points: 5000, demand: 9, status: "9/10", rarity: "exclusive", img: "" },
                 ],
 
-                staff: [
-                    { name: "SteelPaladin1", role: "Owner" },
-                    { name: "LTTD Partner", role: "Partner (+15%)" },
-                ],
-
+                // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
                 getItem(id) { return this.items.find(i => i.id == id); },
                 
                 filteredItems() {
-                    return this.items.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                    return this.items.filter(i => {
+                        const matchRarity = this.filterRarity === 'all' || i.rarity === this.filterRarity;
+                        return matchRarity && i.name.toLowerCase().includes(this.search.toLowerCase());
+                    });
                 },
 
+                getRarityColor(rarity) {
+                    const colors = { uncommon: 'green-500', rare: 'blue-500', epic: 'purple-500', legendary: 'orange-500', mythic: 'red-500', exclusive: 'cyan-400' };
+                    return colors[rarity] || 'white';
+                },
+
+                // ЛОГИКА КАЛЬКУЛЯТОРА
                 add(side, id) {
                     if(side == 'my') this.mySelectedItems.push(id);
                     else this.theirSelectedItems.push(id);
                 },
-
+                remove(side, index) {
+                    if(side == 'my') this.mySelectedItems.splice(index, 1);
+                    else this.theirSelectedItems.splice(index, 1);
+                },
                 calculateTotal(side) {
-                    let itemsSum = 0;
                     let ids = side == 'my' ? this.mySelectedItems : this.theirSelectedItems;
                     let gems = side == 'my' ? this.myGems : this.theirGems;
-                    
-                    ids.forEach(id => {
-                        let item = this.getItem(id);
-                        if(item) itemsSum += item.price;
-                    });
-                    
-                    return (itemsSum + (gems || 0)) * this.multiplier;
+                    let itemsSum = ids.reduce((sum, id) => sum + (this.getItem(id)?.price || 0), 0);
+                    return itemsSum + (Number(gems) || 0);
                 },
-
                 calculateDiff() {
                     let my = this.calculateTotal('my');
                     let their = this.calculateTotal('their');
-                    if(my == 0) return "Add your side...";
-                    
+                    if(my == 0) return "Add your offer...";
                     let diff = their - my;
                     let percent = ((their / my) - 1) * 100;
-                    
                     if (diff > 0) return "🏆 WIN (+" + Math.round(percent) + "%)";
                     if (diff === 0) return "⚖️ FAIR";
                     return "❌ LOSS (" + Math.round(percent) + "%)";
                 },
-
                 resultColor() {
                     let my = this.calculateTotal('my');
                     let their = this.calculateTotal('their');
-                    if (my + their == 0) return "bg-black/40 text-slate-600 border-white/5";
+                    if (my + their == 0) return "border-white/5 text-slate-700";
+                    if (my == 0) return "border-blue-500/20 text-blue-500/50";
                     let diff = their - my;
-                    if (my == 0) return "bg-black/40 text-slate-500 border-white/5";
-                    if (diff > 0) return "bg-green-500/10 text-green-500 border-green-500/50 shadow-lg shadow-green-500/20";
-                    if (diff === 0) return "bg-yellow-500/10 text-yellow-500 border-yellow-500/50 shadow-lg shadow-yellow-500/20";
-                    return "bg-red-500/10 text-red-500 border-red-500/50 shadow-lg shadow-red-500/20";
+                    if (diff > 0) return "border-green-500 bg-green-500/10 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)]";
+                    if (diff === 0) return "border-yellow-500 bg-yellow-500/10 text-yellow-400";
+                    return "border-red-500 bg-red-500/10 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.2)]";
                 },
-
                 resetSide(side) {
                     if(side == 'my') { this.mySelectedItems = []; this.myGems = 0; }
                     else { this.theirSelectedItems = []; this.theirGems = 0; }
