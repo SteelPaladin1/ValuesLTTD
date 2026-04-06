@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8"><title>LTTD ┆ Partners</title>
+    <meta charset="UTF-8"><title>LTTD ┆ Signs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
-        .nav-btn { @apply border-2 font-black text-[10px] uppercase tracking-tighter transition-all duration-300 flex-1 py-4 text-center; }
-        .btn-blue { border-color: #38bdf8; color: #38bdf8; } .btn-blue:hover { border-color: white; color: white; }
-        .btn-purple { border-color: #a855f7; color: #a855f7; } .btn-purple:hover { border-color: white; color: white; }
-        .btn-red { border-color: #ef4444; color: #ef4444; } .btn-red:hover, .btn-red.active { background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 15px #ef4444; color: white; }
+        .nav-container { @apply flex w-full border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50; }
+        .nav-item { @apply flex-1 py-5 text-center font-black text-[11px] uppercase tracking-tighter transition-all duration-300 border-r border-white/5; border-bottom: 4px solid transparent; }
+        .n-red { color: #ef4444; } .n-red.active, .n-red:hover { border-bottom-color: #ef4444; background: rgba(239, 68, 68, 0.15); box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2); text-shadow: 0 0 10px #ef4444; color: white; }
     </style>
 </head>
 <body>
-    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 flex">
-        <a href="index.html" class="nav-btn btn-blue">Main</a>
-        <a href="rarity.html" class="nav-btn btn-cyan">Units</a>
-        <a href="calculator.html" class="nav-btn btn-purple">Calc</a>
-        <a href="signs.html" class="nav-btn btn-red active">Signs</a>
-        <a href="codes.html" class="nav-btn btn-green">Codes</a>
-        <a href="updates.html" class="nav-btn btn-orange">Updates</a>
+    <nav class="nav-container">
+        <a href="index.html" class="nav-item text-[#38bdf8]">Main</a>
+        <a href="rarity.html" class="nav-item text-[#22d3ee]">Units</a>
+        <a href="calculator.html" class="nav-item text-[#a855f7]">Calc</a>
+        <a href="signs.html" class="nav-item n-red active">Signs</a>
+        <a href="codes.html" class="nav-item text-[#4ade80]">Codes</a>
+        <a href="updates.html" class="nav-item text-[#f59e0b]">Updates</a>
     </nav>
-    <div class="max-w-4xl mx-auto py-20 text-center px-4">
-        <h1 class="text-5xl font-black italic uppercase mb-16 neon-text-blue" style="text-shadow: 0 0 10px #38bdf8;">💎 Sign Value 💎</h1>
-        <h2 class="text-4xl font-black italic mb-10">📷 <span class="text-red-600">Partner</span> sign 📷</h2>
-        <div class="space-y-6 text-3xl font-black italic">
-            <div class="hover:scale-110 transition-transform"><span class="text-red-600">Szychvbh</span> - 10% To Value</div>
-            <div class="hover:scale-110 transition-transform"><span class="text-red-600">Oktawian_jestem2012</span> - 15% To Value</div>
+    <div class="max-w-4xl mx-auto py-20 text-center">
+        <h1 class="text-6xl font-black italic uppercase mb-16 text-blue-400">💎 Sign Value 💎</h1>
+        <h2 class="text-4xl font-black italic mb-10 uppercase">📷 <span class="text-red-600">Partner</span> sign 📷</h2>
+        <div class="space-y-6 text-3xl font-black italic uppercase">
+            <div class="transition-transform hover:scale-105"><span class="text-red-600">Szychvbh</span> - 10% To Value</div>
+            <div class="transition-transform hover:scale-105"><span class="text-red-600">Oktawian_jestem2012</span> - 15% To Value</div>
+            <div class="transition-transform hover:scale-105"><span class="text-red-600">tocinoytmasterd</span> - 10% To Value</div>
         </div>
     </div>
 </body>
