@@ -1,43 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8"><title>LTTD ┆ Community</title>
+    <meta charset="UTF-8">
+    <title>LTTD ┆ Community</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
-        .nav-btn { @apply border-2 font-black text-[10px] uppercase tracking-tighter transition-all duration-300 flex-1 py-4 text-center; }
-        .btn-blue { border-color: #38bdf8; color: #38bdf8; } .btn-blue:hover, .btn-blue.active { background: rgba(56, 189, 248, 0.2); box-shadow: 0 0 15px #38bdf8; color: white; }
-        .btn-purple { border-color: #a855f7; color: #a855f7; } .btn-purple:hover { background: rgba(168, 85, 247, 0.2); box-shadow: 0 0 15px #a855f7; color: white; }
-        .btn-green { border-color: #4ade80; color: #4ade80; } .btn-green:hover { background: rgba(74, 222, 128, 0.2); box-shadow: 0 0 15px #4ade80; color: white; }
-        .btn-red { border-color: #ef4444; color: #ef4444; } .btn-red:hover { background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 15px #ef4444; color: white; }
-        .btn-orange { border-color: #f59e0b; color: #f59e0b; } .btn-orange:hover { background: rgba(245, 158, 11, 0.2); box-shadow: 0 0 15px #f59e0b; color: white; }
-        .btn-cyan { border-color: #22d3ee; color: #22d3ee; } .btn-cyan:hover { background: rgba(34, 211, 238, 0.2); box-shadow: 0 0 15px #22d3ee; color: white; }
+        .nav-container { @apply flex w-full border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50; }
+        .nav-item { @apply flex-1 py-5 text-center font-black text-[11px] uppercase tracking-tighter transition-all duration-300 border-r border-white/5; border-bottom: 4px solid transparent; }
+        .n-blue { color: #38bdf8; } .n-blue.active, .n-blue:hover { border-bottom-color: #38bdf8; background: rgba(56, 189, 248, 0.15); box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.2); text-shadow: 0 0 10px #38bdf8; color: white; }
+        .n-cyan { color: #22d3ee; } .n-cyan:hover { border-bottom-color: #22d3ee; background: rgba(34, 211, 238, 0.1); }
+        .n-purple { color: #a855f7; } .n-purple:hover { border-bottom-color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+        .n-red { color: #ef4444; } .n-red:hover { border-bottom-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .n-green { color: #4ade80; } .n-green:hover { border-bottom-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+        .n-orange { color: #f59e0b; } .n-orange:hover { border-bottom-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
     </style>
 </head>
 <body>
-    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 flex">
-        <a href="index.html" class="nav-btn btn-blue active">Main</a>
-        <a href="rarity.html" class="nav-btn btn-cyan">Units</a>
-        <a href="calculator.html" class="nav-btn btn-purple">Calc</a>
-        <a href="signs.html" class="nav-btn btn-red">Signs</a>
-        <a href="codes.html" class="nav-btn btn-green">Codes</a>
-        <a href="updates.html" class="nav-btn btn-orange">Updates</a>
+    <nav class="nav-container">
+        <a href="index.html" class="nav-item n-blue active">Main</a>
+        <a href="rarity.html" class="nav-item n-cyan">Units</a>
+        <a href="calculator.html" class="nav-item n-purple">Calc</a>
+        <a href="signs.html" class="nav-item n-red">Signs</a>
+        <a href="codes.html" class="nav-item n-green">Codes</a>
+        <a href="updates.html" class="nav-item n-orange">Updates</a>
     </nav>
-    <div class="max-w-4xl mx-auto py-20 px-4">
-        <h1 class="text-6xl font-black uppercase italic mb-12 text-center" style="text-shadow: 0 0 20px rgba(255,255,255,0.2);"><span class="text-slate-600">🔗 Community</span> Links</h1>
-        <div class="glass p-12 rounded-[40px] space-y-8 border-t-8 border-blue-500 shadow-2xl">
-            <div class="flex items-center gap-8 group">
-                <div class="w-20 h-20 bg-red-600/20 rounded-3xl flex items-center justify-center text-4xl shadow-lg shadow-red-600/20">🎮</div>
-                <div><span class="text-red-600 font-black uppercase text-xs">Official Game</span><br>
-                <a href="#" class="text-2xl font-bold underline decoration-slate-800 hover:text-blue-400">roblox.com/games/94229247275433</a></div>
-            </div>
-            <div class="flex items-center gap-8 group">
-                <div class="w-20 h-20 bg-blue-600/20 rounded-3xl flex items-center justify-center text-4xl shadow-lg shadow-blue-600/20">📢</div>
-                <div><span class="text-blue-500 font-black uppercase text-xs">Discord Channel</span><br>
-                <a href="#" class="text-2xl font-bold underline decoration-slate-800 hover:text-blue-400">discord.gg/6wCjwJnc</a></div>
-            </div>
+    <div class="max-w-4xl mx-auto py-20 px-4 text-center">
+        <h1 class="text-6xl font-black uppercase italic mb-16" style="text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);">Community Links</h1>
+        <div class="glass p-12 rounded-[40px] space-y-10 border-t-8 border-blue-500 shadow-2xl text-left">
+            <div class="flex items-center gap-8"><span class="text-5xl">🎮</span><div><span class="text-red-600 font-black uppercase text-xs">Roblox Game</span><br><a href="#" class="text-2xl font-bold underline hover:text-blue-400 transition-colors">Legacy Toilet Tower Defense</a></div></div>
+            <div class="flex items-center gap-8"><span class="text-5xl">📢</span><div><span class="text-blue-500 font-black uppercase text-xs">Discord</span><br><a href="#" class="text-2xl font-bold underline hover:text-blue-400 transition-colors">Join Official Server</a></div></div>
         </div>
     </div>
 </body>
