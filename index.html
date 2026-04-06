@@ -2,53 +2,93 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Value List & Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ValuesLTTD ┆ Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        body { background-color: #0f172a; color: white; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        /* Свечение для разных редкостей */
+        .rarity-common { border-left: 4px solid #94a3b8; }
+        .rarity-rare { border-left: 4px solid #3b82f6; box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.2); }
+        .rarity-epic { border-left: 4px solid #a855f7; box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.2); }
+        .rarity-legendary { border-left: 4px solid #f59e0b; box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.3); }
     </style>
 </head>
 <body x-data="tradeApp()" class="p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto">
-        <h1 class="text-3xl font-bold text-center mb-8 text-blue-400">Item Value List ┆ Calculator</h1>
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mb-2">
+                VALUES LTTD
+            </h1>
+            <p class="text-slate-400 text-sm uppercase tracking-widest">Official Value List & Trade Checker</p>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <div class="glass p-6 rounded-2xl border-l-4 border-blue-500">
-                <h2 class="text-xl mb-2">Вы даете (Your Side)</h2>
-                <div class="text-4xl font-mono text-blue-400" x-text="myTotal + ' $' "></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="glass p-6 rounded-3xl border-t border-blue-500/30">
+                <h2 class="text-xs font-bold uppercase text-blue-400 mb-2">Вы даете (Your Side)</h2>
+                <div class="text-5xl font-mono font-bold" x-text="myTotal.toLocaleString() + ' $'"></div>
             </div>
-            <div class="glass p-6 rounded-2xl border-l-4 border-purple-500">
-                <h2 class="text-xl mb-2">Они дают (Their Side)</h2>
-                <div class="text-4xl font-mono text-purple-400" x-text="theirTotal + ' $' "></div>
+            <div class="glass p-6 rounded-3xl border-t border-purple-500/30">
+                <h2 class="text-xs font-bold uppercase text-purple-400 mb-2">Они дают (Their Side)</h2>
+                <div class="text-5xl font-mono font-bold" x-text="theirTotal.toLocaleString() + ' $'"></div>
             </div>
         </div>
 
-        <div class="text-center mb-10 p-4 rounded-xl text-2xl font-bold" 
-             :class="resultColor()" x-show="myTotal > 0 || theirTotal > 0">
-            Результат: <span x-text="calculateDiff()"></span>
+        <div x-show="myTotal > 0 || theirTotal > 0" 
+             x-transition 
+             class="mb-10 p-6 rounded-2xl text-center text-2xl font-bold transition-all shadow-2xl"
+             :class="resultColor()">
+            <span x-text="calculateDiff()"></span>
         </div>
 
-        <h2 class="text-2xl mb-6">Выберите предметы:</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <template x-for="item in items" :key="item.id">
-                <div class="glass p-4 rounded-xl hover:scale-105 transition-all cursor-pointer border hover:border-blue-500"
-                     @click="addItem(item)">
-                    <div class="w-full h-24 bg-slate-800 rounded-lg mb-2 flex items-center justify-center text-xs text-slate-500">IMAGE</div>
-                    <div class="font-bold text-sm" x-text="item.name"></div>
-                    <div class="text-green-400 text-sm" x-text="item.price + ' $'"></div>
+        <div class="mb-8">
+            <input type="text" x-model="search" placeholder="Поиск предмета по названию..." 
+                   class="w-full p-4 glass rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg">
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <template x-for="item in filteredItems()" :key="item.id">
+                <div class="glass p-4 rounded-2xl hover:scale-[1.03] transition-all flex flex-col justify-between group"
+                     :class="'rarity-' + item.rarity">
                     
-                    <div class="flex gap-2 mt-2">
-                        <button @click.stop="myTotal += item.price" class="bg-blue-600 px-2 py-1 rounded text-[10px]">В Мои</button>
-                        <button @click.stop="theirTotal += item.price" class="bg-purple-600 px-2 py-1 rounded text-[10px]">В Их</button>
+                    <div>
+                        <div class="w-full h-32 rounded-xl mb-3 overflow-hidden bg-slate-800/50 flex items-center justify-center">
+                            <template x-if="item.img">
+                                <img :src="item.img" class="w-full h-full object-contain p-2">
+                            </template>
+                            <template x-if="!item.img">
+                                <span class="text-slate-600 font-bold text-xs">NO IMAGE</span>
+                            </template>
+                        </div>
+
+                        <div class="text-[10px] uppercase font-bold mb-1 opacity-50" x-text="item.rarity"></div>
+                        <h3 class="font-bold text-lg leading-tight mb-1" x-text="item.name"></h3>
+                        <div class="text-green-400 font-mono font-bold text-md" x-text="item.price.toLocaleString() + ' $'"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-4">
+                        <button @click="myTotal += item.price" 
+                                class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white py-2 rounded-lg text-[10px] font-bold uppercase transition-colors">
+                            В Мои
+                        </button>
+                        <button @click="theirTotal += item.price" 
+                                class="bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white py-2 rounded-lg text-[10px] font-bold uppercase transition-colors">
+                            В Их
+                        </button>
                     </div>
                 </div>
             </template>
         </div>
 
-        <button @click="reset()" class="mt-10 text-slate-400 underline w-full text-center">Сбросить расчет</button>
+        <div class="mt-12 pb-20 text-center">
+            <button @click="reset()" class="text-slate-500 hover:text-white transition-colors flex items-center gap-2 mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+                Сбросить расчет трейда
+            </button>
+        </div>
     </div>
 
     <script>
@@ -56,27 +96,41 @@
             return {
                 myTotal: 0,
                 theirTotal: 0,
+                search: '',
+                // РЕДАКТИРУЙ ПРЕДМЕТЫ ТУТ:
                 items: [
-                    { id: 1, name: "Член аптайма", price: 5000 },
-                    { id: 2, name: "Ancient Coin", price: 1200 },
-                    { id: 3, name: "Soul Key", price: 8500 },
-                    { id: 4, name: "Rusty Sword", price: 150 },
-                    { id: 5, name: "Magic Dust", price: 300 },
-                    { id: 6, name: "Mega Potion", price: 2500 }
+                    { id: 1, name: "Dark Essence", price: 15000, rarity: "legendary", img: "" },
+                    { id: 2, name: "Cursed Eye", price: 4200, rarity: "epic", img: "" },
+                    { id: 3, name: "Rusty Gear", price: 150, rarity: "common", img: "" },
+                    { id: 4, name: "Blue Battery", price: 1200, rarity: "rare", img: "" },
+                    { id: 5, name: "Soul Lantern", price: 8900, rarity: "epic", img: "" },
+                    { id: 6, name: "Old Radio", price: 400, rarity: "common", img: "" },
                 ],
-                calculateDiff() {
-                    if (this.myTotal === 0) return "Жду предметов...";
-                    let diff = this.theirTotal - this.myTotal;
-                    if (diff > 0) return "ВЫГОДНО (Win) +" + diff;
-                    if (diff === 0) return "РАВНО (Fair)";
-                    return "УБЫТОК (Loss) " + diff;
+
+                filteredItems() {
+                    return this.items.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
                 },
+
+                calculateDiff() {
+                    if (this.myTotal === 0 && this.theirTotal === 0) return "";
+                    let diff = this.theirTotal - this.myTotal;
+                    let percent = ((this.theirTotal / this.myTotal) - 1) * 100;
+                    
+                    if (this.myTotal === 0) return "Ждем ваших предметов...";
+
+                    if (diff > 0) return "ВЫГОДНО (Win) +" + diff.toLocaleString() + " $ (+" + percent.toFixed(0) + "%)";
+                    if (diff === 0) return "РАВНО (Fair)";
+                    return "УБЫТОК (Loss) " + diff.toLocaleString() + " $ (" + percent.toFixed(0) + "%)";
+                },
+
                 resultColor() {
                     let diff = this.theirTotal - this.myTotal;
-                    if (diff > 0) return "bg-green-900/50 text-green-400";
-                    if (diff === 0) return "bg-yellow-900/50 text-yellow-400";
-                    return "bg-red-900/50 text-red-400";
+                    if (this.myTotal === 0) return "glass text-slate-400";
+                    if (diff > 0) return "bg-green-500/20 text-green-400 border border-green-500/50 shadow-green-500/10";
+                    if (diff === 0) return "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 shadow-yellow-500/10";
+                    return "bg-red-500/20 text-red-400 border border-red-500/50 shadow-red-500/10";
                 },
+
                 reset() {
                     this.myTotal = 0;
                     this.theirTotal = 0;
