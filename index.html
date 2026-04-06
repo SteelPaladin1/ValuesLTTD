@@ -3,122 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValuesLTTD ┆ Portal</title>
+    <title>ValuesLTTD ┆ Cyber Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #0f172a; color: white; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .nav-btn { @apply px-4 py-2 rounded-xl transition-all font-bold text-sm uppercase tracking-wider; }
-        .active-tab { @apply bg-blue-600 text-white shadow-lg shadow-blue-500/30; }
-        .inactive-tab { @apply text-slate-400 hover:bg-slate-800; }
-        /* Редкости */
+        body { background-color: #020617; color: #f1f5f9; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        
+        /* Эффект стекла для фонов */
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* БАЗОВЫЙ СТИЛЬ КНОПОК-НАВИГАЦИИ (Прямоугольные) */
+        .nav-btn { 
+            @apply px-8 py-4 rounded-none transition-all duration-300 font-extrabold text-sm uppercase tracking-wider relative border-2;
+            box-shadow: 0 0 5px rgba(255,255,255,0.05);
+        }
+
+        /* НЕАКТИВНАЯ КНОПКА (Тусклая, но с контуром) */
+        .tab-inactive { 
+            @apply border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300 bg-slate-950/50; 
+        }
+
+        /* --- НЕОНОВЫЕ СТИЛИ ДЛЯ АКТИВНЫХ КНОПОК --- */
+        
+        /* 1. СИНИЙ НЕОН (Value List) */
+        .tab-active-blue { 
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+            color: #38bdf8;
+            text-shadow: 0 0 8px #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5), inset 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        /* 2. ФИОЛЕТОВЫЙ НЕОН (Calculator) */
+        .tab-active-purple { 
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+            color: #a855f7;
+            text-shadow: 0 0 8px #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        /* 3. ЗЕЛЕНЫЙ НЕОН (Staff) */
+        .tab-active-green { 
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+            color: #4ade80;
+            text-shadow: 0 0 8px #4ade80;
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.5), inset 0 0 10px rgba(74, 222, 128, 0.3);
+        }
+
+        /* Стили редкости для списка предметов (Градиент сверху) */
         .rarity-common { border-top: 4px solid #94a3b8; }
-        .rarity-rare { border-top: 4px solid #3b82f6; }
-        .rarity-epic { border-top: 4px solid #a855f7; }
-        .rarity-legendary { border-top: 4px solid #f59e0b; }
+        .rarity-rare { border-top: 4px solid #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+        .rarity-epic { border-top: 4px solid #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.1); }
+        .rarity-legendary { border-top: 4px solid #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
     </style>
 </head>
 <body x-data="portalApp()" class="pb-20">
 
-    <nav class="sticky top-0 z-50 p-4 glass mb-8 border-b border-white/10">
-        <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-2">
-            <button @click="tab = 'values'" :class="tab == 'values' ? 'active-tab' : 'inactive-tab'" class="nav-btn">Value List</button>
-            <button @click="tab = 'calc'" :class="tab == 'calc' ? 'active-tab' : 'inactive-tab'" class="nav-btn">Calculator</button>
-            <button @click="tab = 'staff'" :class="tab == 'staff' ? 'active-tab' : 'inactive-tab'" class="nav-btn">Partners & Staff</button>
+    <nav class="sticky top-0 z-50 mb-12 border-b border-slate-800 bg-slate-950/80 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-stretch">
+            
+            <div class="flex items-center justify-center p-4 border-b md:border-b-0 md:border-r border-slate-800">
+                <span class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                    VALUES LTTD
+                </span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row flex-grow">
+                <button @click="tab = 'values'" 
+                        class="nav-btn flex-grow"
+                        :class="tab == 'values' ? 'tab-active-blue' : 'tab-inactive'">
+                    Value List
+                </button>
+                <button @click="tab = 'calc'" 
+                        class="nav-btn flex-grow border-t-0 sm:border-t-2 sm:border-l-0"
+                        :class="tab == 'calc' ? 'tab-active-purple' : 'tab-inactive'">
+                    Trade Checker
+                </button>
+                <button @click="tab = 'staff'" 
+                        class="nav-btn flex-grow border-t-0 sm:border-t-2 sm:border-l-0"
+                        :class="tab == 'staff' ? 'tab-active-green' : 'tab-inactive'">
+                    Partners & Staff
+                </button>
+            </div>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4">
 
-        <div x-show="tab == 'values'" x-transition>
-            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                <h1 class="text-3xl font-black">VALUE LIST</h1>
+        <div x-show="tab == 'values'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 glass p-6 rounded-2xl border border-blue-500/20 shadow-lg shadow-blue-500/5">
+                <h1 class="text-4xl font-black tracking-tight border-b-4 border-blue-500 pb-2">CURRENT VALUES</h1>
                 
-                <div class="glass p-2 rounded-2xl flex items-center gap-3">
-                    <span class="text-xs font-bold text-slate-400 ml-2">МНОЖИТЕЛЬ:</span>
-                    <select x-model="multiplier" class="bg-slate-900 border-none rounded-xl p-2 text-sm focus:ring-2 focus:ring-blue-500">
-                        <option value="1">Стандарт (1.0x)</option>
-                        <option value="1.1">Партнер (+10%)</option>
-                        <option value="1.15">Партнер (+15%)</option>
-                        <option value="1.25">VIP (+25%)</option>
+                <div class="bg-slate-900 border border-blue-500/30 p-2 rounded-xl flex items-center gap-3 shadow-inner">
+                    <span class="text-xs font-bold text-blue-300 ml-2 uppercase">Multiplier:</span>
+                    <select x-model="multiplier" class="bg-slate-950 border border-blue-800 text-blue-300 rounded-lg p-3 text-sm font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer">
+                        <option value="1">STANDARD (1.0x)</option>
+                        <option value="1.1">PARTNER (+10%)</option>
+                        <option value="1.15">PARTNER (+15%)</option>
+                        <option value="1.25">VIP MEMBER (+25%)</option>
                     </select>
                 </div>
             </div>
 
-            <input type="text" x-model="search" placeholder="Поиск предмета..." class="w-full p-4 glass rounded-2xl mb-8 outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" x-model="search" placeholder="Type item name to filter..." class="w-full p-5 glass rounded-2xl mb-10 text-lg outline-none border-blue-500/20 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-inner">
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                 <template x-for="item in filteredItems()" :key="item.id">
-                    <div class="glass p-4 rounded-2xl relative group" :class="'rarity-' + item.rarity">
-                        <div class="w-full h-32 bg-slate-800/50 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
-                            <img :src="item.img" x-show="item.img" class="w-full h-full object-contain p-2">
-                            <span x-show="!item.img" class="text-slate-600 font-bold text-xs">NO IMG</span>
+                    <div class="glass p-5 rounded-2xl relative group transition-all duration-300 hover:border-blue-500/50 hover:-translate-y-1" :class="'rarity-' + item.rarity">
+                        <div class="w-full h-32 bg-slate-950 rounded-xl mb-4 flex items-center justify-center overflow-hidden border border-slate-800 shadow-inner p-2 relative">
+                            <img :src="item.img" x-show="item.img" class="max-w-full max-h-full object-contain">
+                            <span x-show="!item.img" class="text-slate-700 font-black text-xs">NO DATA</span>
+                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         </div>
-                        <h3 class="font-bold mb-1" x-text="item.name"></h3>
-                        <div class="text-green-400 font-mono font-bold" x-text="Math.round(item.price * multiplier).toLocaleString() + ' $'"></div>
-                        <div class="text-[10px] uppercase opacity-40 mt-1" x-text="item.rarity"></div>
+                        <h3 class="font-bold mb-1 group-hover:text-blue-300 transition-colors" x-text="item.name"></h3>
+                        <div class="text-green-400 font-mono font-bold text-lg" x-text="Math.round(item.price * multiplier).toLocaleString() + ' $'"></div>
+                        <div class="text-[10px] uppercase font-black opacity-30 mt-1 tracking-widest" x-text="item.rarity"></div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <div x-show="tab == 'calc'" x-transition>
-            <h1 class="text-3xl font-black mb-8 text-center">TRADE CALCULATOR</h1>
+        <div x-show="tab == 'calc'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+            <h1 class="text-4xl font-black mb-10 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">TRADE CHECKER</h1>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="glass p-6 rounded-3xl border-l-8 border-blue-500">
-                    <h2 class="text-blue-400 font-bold mb-2">YOU SEND</h2>
-                    <div class="text-4xl font-black" x-text="Math.round(myTotal * multiplier).toLocaleString() + ' $'"></div>
-                    <button @click="myTotal = 0" class="mt-4 text-xs text-slate-500 underline">Очистить</button>
+                <div class="glass p-8 rounded-3xl border border-purple-500/30 relative overflow-hidden group">
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"></div>
+                    <h2 class="text-purple-400 font-bold mb-3 uppercase tracking-wider text-xs relative z-10">YOU SEND</h2>
+                    <div class="text-5xl font-black relative z-10" x-text="Math.round(myTotal * multiplier).toLocaleString() + ' $'"></div>
+                    <button @click="myTotal = 0" class="mt-5 text-xs text-purple-600 hover:text-purple-400 underline relative z-10">Clear Side</button>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-8 border-purple-500">
-                    <h2 class="text-purple-400 font-bold mb-2">THEY SEND</h2>
-                    <div class="text-4xl font-black" x-text="Math.round(theirTotal * multiplier).toLocaleString() + ' $'"></div>
-                    <button @click="theirTotal = 0" class="mt-4 text-xs text-slate-500 underline">Очистить</button>
+                <div class="glass p-8 rounded-3xl border border-pink-500/30 relative overflow-hidden group">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl"></div>
+                    <h2 class="text-pink-400 font-bold mb-3 uppercase tracking-wider text-xs relative z-10">THEY SEND</h2>
+                    <div class="text-5xl font-black relative z-10" x-text="Math.round(theirTotal * multiplier).toLocaleString() + ' $'"></div>
+                    <button @click="theirTotal = 0" class="mt-5 text-xs text-pink-600 hover:text-pink-400 underline relative z-10">Clear Side</button>
                 </div>
             </div>
 
-            <div x-show="myTotal > 0 || theirTotal > 0" class="p-6 rounded-2xl mb-8 text-center text-xl font-bold glass border-2" :class="resultColor()">
+            <div x-show="myTotal > 0 || theirTotal > 0" class="p-6 rounded-2xl mb-10 text-center text-2xl font-black glass border-2 shadow-2xl transition-all duration-300" :class="resultColor()">
                 <span x-text="calculateDiff()"></span>
             </div>
 
+            <h2 class="text-xl font-bold mb-5 text-slate-400 uppercase tracking-widest">Click to add to calculator:</h2>
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                 <template x-for="item in items" :key="item.id">
-                    <div class="glass p-3 rounded-xl text-center">
-                        <div class="font-bold text-xs mb-2 text-slate-300" x-text="item.name"></div>
-                        <div class="flex gap-1">
-                            <button @click="myTotal += item.price" class="flex-1 bg-blue-600 py-1 rounded text-[10px] font-bold">В Мои</button>
-                            <button @click="theirTotal += item.price" class="flex-1 bg-purple-600 py-1 rounded text-[10px] font-bold">В Их</button>
+                    <div class="glass p-3 rounded-xl border border-purple-500/10 hover:border-purple-500/50 transition-colors">
+                        <div class="font-bold text-xs mb-3 text-slate-300 truncate" x-text="item.name"></div>
+                        <div class="flex gap-1.5">
+                            <button @click="myTotal += item.price" class="flex-1 bg-purple-900/50 hover:bg-purple-600 text-purple-300 hover:text-white py-2 rounded-lg text-[10px] font-bold uppercase transition-all">В Мои</button>
+                            <button @click="theirTotal += item.price" class="flex-1 bg-pink-900/50 hover:bg-pink-600 text-pink-300 hover:text-white py-2 rounded-lg text-[10px] font-bold uppercase transition-all">В Их</button>
                         </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <div x-show="tab == 'staff'" x-transition>
-            <h2 class="text-2xl font-black mb-6 text-blue-400">ADMINISTRATION</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+        <div x-show="tab == 'staff'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+            
+            <h2 class="text-3xl font-black mb-8 text-green-400 border-l-8 border-green-500 pl-4 uppercase tracking-tighter">ADMINISTRATION HQ</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16">
                 <template x-for="person in staff" :key="person.name">
-                    <div class="glass p-6 rounded-3xl border-b-4 border-blue-500 flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-slate-800 overflow-hidden flex-shrink-0">
+                    <div class="glass p-6 rounded-3xl border border-green-500/20 flex items-center gap-5 relative overflow-hidden group hover:border-green-500/50 transition-colors">
+                        <div class="w-20 h-20 rounded-2xl bg-slate-950 overflow-hidden flex-shrink-0 border-2 border-slate-800 shadow-inner group-hover:border-green-800 transition-colors">
                             <img :src="person.avatar" x-show="person.avatar" class="w-full h-full object-cover">
                         </div>
                         <div>
-                            <div class="font-bold text-lg" x-text="person.name"></div>
-                            <div class="text-blue-400 text-xs font-bold uppercase" x-text="person.role"></div>
+                            <div class="font-extrabold text-xl group-hover:text-green-300" x-text="person.name"></div>
+                            <div class="text-green-400 text-xs font-black uppercase tracking-widest mt-1 bg-green-950 px-2 py-1 rounded" x-text="person.role"></div>
                         </div>
+                        <div class="absolute -bottom-8 -right-8 text-6xl font-black text-green-950 group-hover:text-green-900 transition-colors" x-text="person.role.substring(0,1)"></div>
                     </div>
                 </template>
             </div>
 
-            <h2 class="text-2xl font-black mb-6 text-purple-400">OFFICIAL PARTNERS</h2>
+            <h2 class="text-3xl font-black mb-8 text-emerald-400 border-l-8 border-emerald-500 pl-4 uppercase tracking-tighter">NETWORK PARTNERS</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <template x-for="partner in partners" :key="partner.name">
-                    <div class="glass p-6 rounded-3xl border-b-4 border-purple-500">
-                        <div class="font-bold text-xl mb-1" x-text="partner.name"></div>
-                        <div class="text-purple-400 text-xs mb-3 font-bold" x-text="'Value: ' + partner.bonus"></div>
-                        <p class="text-slate-400 text-sm" x-text="partner.desc"></p>
+                    <div class="glass p-8 rounded-3xl border-2 border-emerald-900 hover:border-emerald-600 transition-all duration-300 hover:-translate-y-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="font-black text-2xl text-white" x-text="partner.name"></div>
+                            <div class="bg-emerald-500 text-slate-950 text-xs font-black px-3 py-1.5 rounded-full" x-text="'Value: ' + partner.bonus"></div>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed" x-text="partner.desc"></p>
                     </div>
                 </template>
             </div>
@@ -126,54 +198,85 @@
 
     </div>
 
+    <button x-show="tab == 'calc' && (myTotal > 0 || theirTotal > 0)" 
+            @click="reset()" 
+            x-transition 
+            class="fixed bottom-6 right-6 p-4 rounded-full glass border-2 border-red-500/50 text-red-400 hover:bg-red-600 hover:text-white shadow-lg shadow-red-500/20 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H4z"/></svg>
+    </button>
+
     <script>
         function portalApp() {
             return {
-                tab: 'values',
+                tab: 'values', // Какая вкладка открыта при старте
                 search: '',
-                multiplier: 1,
-                myTotal: 0,
-                theirTotal: 0,
+                multiplier: 1, // Текущий множитель цены
+                myTotal: 0,    // Сумма твоих предметов
+                theirTotal: 0, // Сумма их предметов
 
-                // 1. СПИСОК ПРЕДМЕТОВ
+                // =============================================
+                // 1. ДАННЫЕ: СПИСОК ПРЕДМЕТОВ (ValuesLTTD)
+                // Редкости: common, rare, epic, legendary
+                // =============================================
                 items: [
                     { id: 1, name: "Dark Essence", price: 15000, rarity: "legendary", img: "" },
                     { id: 2, name: "Cursed Eye", price: 4200, rarity: "epic", img: "" },
                     { id: 3, name: "Rusty Gear", price: 150, rarity: "common", img: "" },
+                    { id: 4, name: "Blue Battery", price: 1200, rarity: "rare", img: "" },
+                    { id: 5, name: "Soul Lantern", price: 8900, rarity: "epic", img: "" },
+                    { id: 6, name: "Old Radio", price: 400, rarity: "common", img: "" },
                 ],
 
-                // 2. СПИСОК АДМИНИСТРАЦИИ
+                // =============================================
+                // 2. ДАННЫЕ: СОСТАВ КОМАНДЫ (Staff)
+                // =============================================
                 staff: [
-                    { name: "OwnerName", role: "Founder", avatar: "" },
+                    { name: "OwnerName", role: "Developer", avatar: "" },
                     { name: "Admin_1", role: "Manager", avatar: "" },
+                    { name: "Mod_A", role: "Moderator", avatar: "" },
                 ],
 
-                // 3. СПИСОК ПАРТНЕРОВ
+                // =============================================
+                // 3. ДАННЫЕ: ПАРТНЕРЫ (Network)
+                // =============================================
                 partners: [
-                    { name: "SuperTrader YT", bonus: "+15%", desc: "Famous Roblox content creator." },
-                    { name: "LTTD Group", bonus: "+10%", desc: "Official trading hub partner." },
+                    { name: "SuperTrader YT", bonus: "+15%", desc: "Major Roblox content creator and trade expert." },
+                    { name: "LTTD Hub", bonus: "+10%", desc: "The official trading Discord server." },
                 ],
 
+                // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+
+                // Фильтрация списка предметов (для поиска)
                 filteredItems() {
                     return this.items.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
                 },
 
+                // Расчет результата сделки
                 calculateDiff() {
                     let myM = this.myTotal * this.multiplier;
                     let theirM = this.theirTotal * this.multiplier;
-                    if (myM === 0) return "Add your items";
+                    if (myM === 0) return "Add your items to begin comparison";
                     let diff = theirM - myM;
-                    if (diff > 0) return "WIN (Выгодно) +" + Math.round(diff).toLocaleString() + " $";
-                    if (diff === 0) return "FAIR (Равно)";
-                    return "LOSS (Убыток) " + Math.round(diff).toLocaleString() + " $";
+                    let percent = ((theirM / myM) - 1) * 100;
+                    
+                    if (diff > 0) return "MASSIVE WIN +" + Math.round(diff).toLocaleString() + " $ (+" + percent.toFixed(0) + "%)";
+                    if (diff === 0) return "FAIR TRADE (Equal Value)";
+                    return "LOSS " + Math.round(diff).toLocaleString() + " $ (" + percent.toFixed(0) + "%)";
                 },
 
+                // Цвет плашки результата (красный/желтый/зеленый)
                 resultColor() {
                     let diff = (this.theirTotal * this.multiplier) - (this.myTotal * this.multiplier);
-                    if (this.myTotal === 0) return "border-slate-700 text-slate-500";
-                    if (diff > 0) return "border-green-500 text-green-400 bg-green-500/10";
-                    if (diff === 0) return "border-yellow-500 text-yellow-400 bg-yellow-500/10";
-                    return "border-red-500 text-red-400 bg-red-500/10";
+                    if (this.myTotal === 0) return "border-slate-800 text-slate-500 bg-slate-950";
+                    if (diff > 0) return "border-green-500 text-green-300 bg-green-950 shadow-green-500/20";
+                    if (diff === 0) return "border-yellow-500 text-yellow-300 bg-yellow-950 shadow-yellow-500/20";
+                    return "border-red-500 text-red-300 bg-red-950 shadow-red-500/20";
+                },
+
+                // Сброс калькулятора
+                reset() {
+                    this.myTotal = 0;
+                    this.theirTotal = 0;
                 }
             }
         }
