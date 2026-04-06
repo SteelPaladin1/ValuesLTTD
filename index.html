@@ -7,24 +7,37 @@
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
-        .nav-link { @apply px-4 py-4 border-b-2 border-slate-800 text-slate-500 font-black text-[10px] uppercase hover:text-white transition-all; }
-        .active { @apply border-blue-500 text-white bg-blue-500/10; }
+        .nav-btn { @apply border-2 font-black text-[10px] uppercase tracking-tighter transition-all duration-300 flex-1 py-4 text-center; }
+        .btn-blue { border-color: #38bdf8; color: #38bdf8; } .btn-blue:hover, .btn-blue.active { background: rgba(56, 189, 248, 0.2); box-shadow: 0 0 15px #38bdf8; color: white; }
+        .btn-purple { border-color: #a855f7; color: #a855f7; } .btn-purple:hover { background: rgba(168, 85, 247, 0.2); box-shadow: 0 0 15px #a855f7; color: white; }
+        .btn-green { border-color: #4ade80; color: #4ade80; } .btn-green:hover { background: rgba(74, 222, 128, 0.2); box-shadow: 0 0 15px #4ade80; color: white; }
+        .btn-red { border-color: #ef4444; color: #ef4444; } .btn-red:hover { background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 15px #ef4444; color: white; }
+        .btn-orange { border-color: #f59e0b; color: #f59e0b; } .btn-orange:hover { background: rgba(245, 158, 11, 0.2); box-shadow: 0 0 15px #f59e0b; color: white; }
+        .btn-cyan { border-color: #22d3ee; color: #22d3ee; } .btn-cyan:hover { background: rgba(34, 211, 238, 0.2); box-shadow: 0 0 15px #22d3ee; color: white; }
     </style>
 </head>
 <body>
-    <nav class="flex sticky top-0 bg-black/90 z-50">
-        <a href="index.html" class="nav-link active flex-1 text-center">Main</a>
-        <a href="rarity.html" class="nav-link flex-1 text-center">Units</a>
-        <a href="calculator.html" class="nav-link flex-1 text-center">Calc</a>
-        <a href="signs.html" class="nav-link flex-1 text-center">Signs</a>
-        <a href="codes.html" class="nav-link flex-1 text-center">Codes</a>
-        <a href="updates.html" class="nav-link flex-1 text-center">Updates</a>
+    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 flex">
+        <a href="index.html" class="nav-btn btn-blue active">Main</a>
+        <a href="rarity.html" class="nav-btn btn-cyan">Units</a>
+        <a href="calculator.html" class="nav-btn btn-purple">Calc</a>
+        <a href="signs.html" class="nav-btn btn-red">Signs</a>
+        <a href="codes.html" class="nav-btn btn-green">Codes</a>
+        <a href="updates.html" class="nav-btn btn-orange">Updates</a>
     </nav>
     <div class="max-w-4xl mx-auto py-20 px-4">
-        <h1 class="text-6xl font-black uppercase italic mb-12 text-center"><span class="text-slate-600">🔗 Community</span> Links</h1>
-        <div class="glass p-12 rounded-[40px] space-y-8 border-t-4 border-blue-500">
-            <div class="flex items-center gap-6"><span class="text-4xl">🎮</span><div class="text-xl font-bold"><span class="text-red-600">Game:</span> <a href="#" class="underline opacity-60">roblox.com/games/...</a></div></div>
-            <div class="flex items-center gap-6"><span class="text-4xl">📢</span><div class="text-xl font-bold"><span class="text-blue-600">Discord:</span> <a href="#" class="underline opacity-60">discord.gg/6wCjwJnc</a></div></div>
+        <h1 class="text-6xl font-black uppercase italic mb-12 text-center" style="text-shadow: 0 0 20px rgba(255,255,255,0.2);"><span class="text-slate-600">🔗 Community</span> Links</h1>
+        <div class="glass p-12 rounded-[40px] space-y-8 border-t-8 border-blue-500 shadow-2xl">
+            <div class="flex items-center gap-8 group">
+                <div class="w-20 h-20 bg-red-600/20 rounded-3xl flex items-center justify-center text-4xl shadow-lg shadow-red-600/20">🎮</div>
+                <div><span class="text-red-600 font-black uppercase text-xs">Official Game</span><br>
+                <a href="#" class="text-2xl font-bold underline decoration-slate-800 hover:text-blue-400">roblox.com/games/94229247275433</a></div>
+            </div>
+            <div class="flex items-center gap-8 group">
+                <div class="w-20 h-20 bg-blue-600/20 rounded-3xl flex items-center justify-center text-4xl shadow-lg shadow-blue-600/20">📢</div>
+                <div><span class="text-blue-500 font-black uppercase text-xs">Discord Channel</span><br>
+                <a href="#" class="text-2xl font-bold underline decoration-slate-800 hover:text-blue-400">discord.gg/6wCjwJnc</a></div>
+            </div>
         </div>
     </div>
 </body>
