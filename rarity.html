@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8"><title>LTTD ┆ Units Rarity</title>
+    <meta charset="UTF-8"><title>LTTD ┆ Rarity Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        .nav-btn { @apply border-2 font-black text-[10px] uppercase tracking-tighter transition-all duration-300 flex-1 py-4 text-center; }
+        .btn-blue { border-color: #38bdf8; color: #38bdf8; } .btn-blue:hover { background: rgba(56, 189, 248, 0.2); box-shadow: 0 0 15px #38bdf8; color: white; }
+        .btn-purple { border-color: #a855f7; color: #a855f7; } .btn-purple:hover { background: rgba(168, 85, 247, 0.2); box-shadow: 0 0 15px #a855f7; color: white; }
+        .btn-green { border-color: #4ade80; color: #4ade80; } .btn-green:hover { background: rgba(74, 222, 128, 0.2); box-shadow: 0 0 15px #4ade80; color: white; }
+        .btn-red { border-color: #ef4444; color: #ef4444; } .btn-red:hover { background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 15px #ef4444; color: white; }
+        .btn-orange { border-color: #f59e0b; color: #f59e0b; } .btn-orange:hover { background: rgba(245, 158, 11, 0.2); box-shadow: 0 0 15px #f59e0b; color: white; }
+        .btn-cyan { border-color: #22d3ee; color: #22d3ee; } .btn-cyan:hover, .btn-cyan.active { background: rgba(34, 211, 238, 0.2); box-shadow: 0 0 15px #22d3ee; color: white; }
         .pill-btn { @apply px-5 py-2 rounded-full border-2 font-black text-[10px] uppercase transition-all bg-slate-950; }
-        .nav-link { @apply px-4 py-4 border-b-2 border-slate-800 text-slate-500 font-black text-[10px] uppercase hover:text-white transition-all; }
-        .active { @apply border-blue-500 text-white bg-blue-500/10; }
     </style>
 </head>
 <body x-data="{ rarity: 'uncommon' }">
-    <nav class="flex sticky top-0 bg-black/90 z-50">
-        <a href="index.html" class="nav-link flex-1 text-center">Main</a>
-        <a href="rarity.html" class="nav-link active flex-1 text-center">Units</a>
-        <a href="calculator.html" class="nav-link flex-1 text-center">Calc</a>
-        <a href="signs.html" class="nav-link flex-1 text-center">Signs</a>
-        <a href="codes.html" class="nav-link flex-1 text-center">Codes</a>
-        <a href="updates.html" class="nav-link flex-1 text-center">Updates</a>
+    <nav class="sticky top-0 z-50 bg-black/90 border-b border-white/5 flex">
+        <a href="index.html" class="nav-btn btn-blue">Main</a>
+        <a href="rarity.html" class="nav-btn btn-cyan active">Units</a>
+        <a href="calculator.html" class="nav-btn btn-purple">Calc</a>
+        <a href="signs.html" class="nav-btn btn-red">Signs</a>
+        <a href="codes.html" class="nav-btn btn-green">Codes</a>
+        <a href="updates.html" class="nav-btn btn-orange">Updates</a>
     </nav>
     <div class="max-w-6xl mx-auto py-10 px-4">
         <h1 class="text-6xl font-black italic uppercase tracking-tighter text-center mb-10">
@@ -29,9 +35,9 @@
             <button @click="rarity = 'uncommon'" class="pill-btn border-green-500 text-green-500" :class="rarity == 'uncommon' && 'bg-white text-black'">Uncommon</button>
             <button @click="rarity = 'rare'" class="pill-btn border-blue-500 text-blue-500" :class="rarity == 'rare' && 'bg-white text-black'">Rare</button>
             <button @click="rarity = 'mythic'" class="pill-btn border-red-500 text-red-500" :class="rarity == 'mythic' && 'bg-white text-black'">Mythic</button>
-            <button class="pill-btn border-emerald-500 text-emerald-500">Crates</button>
+            <button class="pill-btn border-emerald-500 text-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]">Crates</button>
         </div>
-        <div class="text-center text-3xl font-black italic uppercase text-blue-400 mb-10">💎 <span x-text="rarity"></span> Value 💎</div>
+        <div class="text-center text-4xl font-black italic uppercase text-cyan-400 mb-10" style="text-shadow: 0 0 10px #22d3ee;">💎 <span x-text="rarity"></span> Value 💎</div>
         </div>
 </body>
 </html>
