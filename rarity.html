@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"><title>LTTD ┆ Units Rarity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
+        .pill-btn { @apply px-5 py-2 rounded-full border-2 font-black text-[10px] uppercase transition-all bg-slate-950; }
+        .nav-link { @apply px-4 py-4 border-b-2 border-slate-800 text-slate-500 font-black text-[10px] uppercase hover:text-white transition-all; }
+        .active { @apply border-blue-500 text-white bg-blue-500/10; }
+    </style>
+</head>
+<body x-data="{ rarity: 'uncommon' }">
+    <nav class="flex sticky top-0 bg-black/90 z-50">
+        <a href="index.html" class="nav-link flex-1 text-center">Main</a>
+        <a href="rarity.html" class="nav-link active flex-1 text-center">Units</a>
+        <a href="calculator.html" class="nav-link flex-1 text-center">Calc</a>
+        <a href="signs.html" class="nav-link flex-1 text-center">Signs</a>
+        <a href="codes.html" class="nav-link flex-1 text-center">Codes</a>
+        <a href="updates.html" class="nav-link flex-1 text-center">Updates</a>
+    </nav>
+    <div class="max-w-6xl mx-auto py-10 px-4">
+        <h1 class="text-6xl font-black italic uppercase tracking-tighter text-center mb-10">
+            Units <span class="text-slate-600">R</span><span class="text-green-500">a</span><span class="text-blue-500">r</span><span class="text-yellow-500">i</span><span class="text-red-500">t</span><span class="text-white">y</span> Page
+        </h1>
+        <div class="flex flex-wrap justify-center gap-2 mb-12">
+            <button @click="rarity = 'uncommon'" class="pill-btn border-green-500 text-green-500" :class="rarity == 'uncommon' && 'bg-white text-black'">Uncommon</button>
+            <button @click="rarity = 'rare'" class="pill-btn border-blue-500 text-blue-500" :class="rarity == 'rare' && 'bg-white text-black'">Rare</button>
+            <button @click="rarity = 'mythic'" class="pill-btn border-red-500 text-red-500" :class="rarity == 'mythic' && 'bg-white text-black'">Mythic</button>
+            <button class="pill-btn border-emerald-500 text-emerald-500">Crates</button>
+        </div>
+        <div class="text-center text-3xl font-black italic uppercase text-blue-400 mb-10">💎 <span x-text="rarity"></span> Value 💎</div>
+        </div>
+</body>
+</html>
