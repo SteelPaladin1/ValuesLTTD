@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"><title>LTTD ┆ Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; color: white; font-family: 'Poppins', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        .side-your { border: 2px solid #00a2ff; box-shadow: 0 0 15px rgba(0, 162, 255, 0.2); }
+        .side-their { border: 2px solid #ff0044; box-shadow: 0 0 15px rgba(255, 0, 68, 0.2); }
+        .nav-link { @apply px-4 py-4 border-b-2 border-slate-800 text-slate-500 font-black text-[10px] uppercase hover:text-white transition-all; }
+        .active { @apply border-blue-500 text-white bg-blue-500/10; }
+    </style>
+</head>
+<body x-data="calcApp()">
+    <nav class="flex sticky top-0 bg-black/90 z-50">
+        <a href="index.html" class="nav-link flex-1 text-center">Main</a>
+        <a href="rarity.html" class="nav-link flex-1 text-center">Units</a>
+        <a href="calculator.html" class="nav-link active flex-1 text-center">Calc</a>
+        <a href="signs.html" class="nav-link flex-1 text-center">Signs</a>
+        <a href="codes.html" class="nav-link flex-1 text-center">Codes</a>
+        <a href="updates.html" class="nav-link flex-1 text-center">Updates</a>
+    </nav>
+    </body>
+</html>
